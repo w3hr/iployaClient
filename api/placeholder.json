@@ -1,0 +1,12 @@
+[
+
+	{ "Name": "TIMESTAMP", "Description": "Current unix timestamp"},
+	{ "Name": "DATE", "Description": "Current date in m.d.y Format"},
+	{ "Name": "TIME", "Description": "Current time in H:i:s Format"},
+	{ "Name": "DATETIME", "Description": "Current full date in Y-m-d H:i:s format"},
+	{ "Name": "SAVEFILEDATETIME", "Description": "Current date in filesave Y-m-d H-i-s format"},
+	{ "Name": "CURRENTDIR", "Description": "Current working directory"},
+	{ "Name": "LOG", "Description": "Current log output"},
+	{ "Name": "PROCCESSINGTIME", "Description": "Current processing time in milliseconds"}
+	
+]

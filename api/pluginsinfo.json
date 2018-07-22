@@ -1,0 +1,142 @@
+{
+  "createDirectory": {
+    "Section": "Dir / File operations",
+    "Name": "create Directory",
+    "Description": "create a Directory at a specific Path.",
+    "Inputs": [
+      {
+        "Label": "Directory Path",
+        "Description": "the Directory Path to create",
+        "Type": "text",
+        "DefaultValue":  "/"
+      }
+    ]
+  },
+  "copyDirectory": {
+    "Section": "Dir / File operations",
+    "Name": "copy Directory",
+    "Description": "copy a Directory (recursiv) from Source to Target.",
+    "Inputs": [
+      {
+        "Label": "Source Directory Path",
+        "Description": "the Source Directory Path to copy",
+        "Type": "text",
+        "DefaultValue": "/"
+      },
+      {
+        "Label": "Target Directory Path",
+        "Description": "the Target Directory Path to copy",
+        "Type": "text",
+        "DefaultValue": "/"
+      }
+    ]
+  },
+  "monoXBuild": {
+    "Section": "Building",
+    "Name": "monoXBuild",
+    "Description": "Build a mono (C#) Programm.",
+    "Inputs": [
+      {
+        "Label": "Filepath",
+        "Description": "Path of the file to build.",
+        "Type": "text",
+        "DefaultValue": "/"
+      },
+      {
+        "Label": "Build options",
+        "Description": "Building options",
+        "Type": "text",
+        "DefaultValue": "/p:Configuration=Release /p:TargetFrameworkVersion='v4.5'"
+      }
+    ]
+  },
+  "removeDirectory": {
+    "Section": "Dir / File operations",
+    "Name": "remove Directory",
+    "Description": "remove a Directory (recursiv) at a specific Path.",
+    "Inputs": [
+      {
+        "Label": "Directory Path",
+        "Description": "the Directory Path to remove",
+        "Type": "text",
+        "DefaultValue": "/"
+      }
+    ]
+  },
+  "replaceFileString": {
+    "Section": "Dir / File operations",
+    "Name": "Replace String in File",
+    "Description": "Replace a specific String in a File with another String.",
+    "Inputs": [
+      {
+        "Label": "Filepath",
+        "Description": "Filesource path",
+        "Type": "text",
+        "DefaultValue":  "/"
+      },
+      {
+        "Label": "Search String",
+        "Description": "Search String",
+        "Type": "text",
+        "DefaultValue": "foo"
+      },
+      {
+        "Label": "Replace with",
+        "Description": "Replace with",
+        "Type": "text",
+        "DefaultValue": "bar"
+      }
+    ]
+  },
+  "linuxSendmail": {
+    "Section": "Linux / Sendmail",
+    "Name": "Sendmail (Linux)",
+    "Description": "Send an email with linux sendmail.",
+    "Inputs": [
+      {
+        "Label": "Emailadress",
+        "Description": "Destination Email Adress",
+        "Type": "text",
+        "DefaultValue": "me@localhost"
+      },
+      {
+        "Label": "Description",
+        "Description": "Description",
+        "Type": "text",
+        "DefaultValue": "hey my friend"
+      },
+      {
+        "Label": "Text",
+        "Description": "Text",
+        "Type": "text",
+        "DefaultValue": "hey whats up, dude?"
+      }
+    ]
+  },
+  "wait": {
+    "Section": "System / Processing",
+    "Name": "Wait",
+    "Description": "Wait x Seconds",
+    "Inputs": [
+      {
+        "Label": "Waittime",
+        "Description": "Time to wait",
+        "Type": "number",
+        "DefaultValue": 5
+      }
+    ]
+  },
+  "msg": {
+    "Section": "System / Processing",
+    "Name": "Message",
+    "Description": "Message some Text",
+    "Inputs": [
+      {
+        "Label": "Message",
+        "Description": "Message",
+        "Type": "text",
+        "DefaultValue": "Hey itse me"
+      }
+    ]
+  }
+}

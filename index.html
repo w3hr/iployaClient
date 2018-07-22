@@ -1,0 +1,92 @@
+﻿<html>
+	<head>
+	    <title>iploya: Manage your iploya files</title>
+	    <meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <link rel="stylesheet" href="./uikit/css/uikit.min.css" />
+	    <link rel="stylesheet" href="./css/iploya.css" />
+	    <script type="text/javascript" src="./uikit/js/uikit.min.js"></script>
+	    <script type="text/javascript" src="./js/angular.min.js"></script>
+	    <script type="text/javascript" src="./js/iploya.js"></script>
+	    <link href="https://fonts.googleapis.com/css?family=Orbitron|VT323|Quicksand|Poiret+One" rel="stylesheet">
+	</head>
+	<body ng-app="myApp" ng-controller="myCtrl">
+	    <div class="uk-container uk-margin-large-top">
+	        <h1 class="uk-heading-primary fontc">iPloya - your process automater.</h1>
+	        <div class="uk-container uk-container-expand uk-margin-medium-bottom">
+	            <hr>
+	        </div>
+	        <div uk-grid>
+	            <div class="uk-width-1-5 uk-margin-medium-top">
+	                <div class="uk-text-lead">Plugins</div>
+	                <dl ng-dblclick="CreateNewCommand(key)" ng-repeat="(key, value) in plugins" class="noselect uk-box-shadow-hover-medium uk-padding-small uk-text-break uk-description-list uk-description-list-divider">
+	                    <dt>{{value.Name}}</dt>
+	                    <dd>{{value.Description}}</dd>
+	                </dl>
+	            </div>
+	            <div class="uk-width-3-5">
+	                <ul class="uk-subnav uk-subnav-pill" uk-switcher>
+	                    <li><a href="#">Designer</a></li>
+	                    <li><a ng-click="TodoToJson()" href="#">Source</a></li>
+	                </ul>
+	                <ul class="uk-switcher uk-margin">
+	                    <li>
+	                        <div ng-repeat="(key, value) in todos.Commands" class="uk-margin-large-top uk-box-shadow-small uk-padding-small">
+	                            <div>
+	                                <a ng-click="RemoveId_OnClick(key)" class="uk-float-right" nohref uk-close></a>
+	                                <div class="uk-text-lead">{{value.Action}}</div><br />
+	                                <strong>{{key}}</strong>
+	                                <p>
+	                                    <span class="uk-text-muted uk-text-bold">Input</span>
+	                                </p>
+	                                <div ng-repeat="(inputKey, inputValue) in GetInputByAction(value.Action)">
+	                                    <p>
+	                                        <label>{{inputValue.Label}}</label><br />
+	                                        <input uk-tooltip="{{inputValue.Description}}" ng-model="value.Arguments[$index]" placeholder="{{inputValue.Description}}" type="{{inputValue.Type}}" />
+	                                    </p>
+	                                </div>
+	                                <p>
+	                                    <span class="uk-text-muted uk-text-bold">Set Variable</span>
+	                                    <br />
+	                                    <input ng-model="SetVariablesTmp[key+'-key']" type="text" class="uk-form-small uk-form-width-small" /> <input ng-model="SetVariablesTmp[key+'-value']" type="text" class="uk-form-width-medium uk-form-small" /> <button ng-click="AddSetVariable(key)" type="button">Add</button>
+	                                </p>
+	                                <div ng-repeat="(sv_key, sv_value) in todos.Commands[key].SetVariable">
+	                                    {{sv_value[0]}}: <input class="uk-form-width-medium uk-form-small" type="text" ng-model="sv_value[1]" /> (<a ng-click="RemoveSetVariable(key, sv_value[0])" href="#">remove</a>)
+	                                </div>
+	                                <p>
+	                                    <span class="uk-text-muted uk-text-bold">On</span>
+	                                </p>
+	                                <p>
+	                                    <span class="uk-text-meta uk-text-small">Add new reaction</span><br />
+	                                    <input ngPattern="(0..9)" ng-keypress="AddNewRection($event, todos.Commands[key].On)" class="uk-form-small uk-form-width-small" type="number" />
+	                                </p>
+	                                <div ng-repeat="(reactKey, reactValue) in todos.Commands[key].On">
+	                                    <p>
+	                                        <label>{{reactKey}}</label><br />
+	                                        <select ng-model="todos.Commands[key].On[reactKey]" class="uk-select">
+	                                            <option>next</option>
+	                                            <option>break</option>
+	                                            <option ng-repeat="(inputKey, inputValue) in todos.Commands" ng-if="inputKey!=key">goto {{inputKey}}</option>
+	                                        </select>
+	                                    </p>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </li>
+	                    <li id="SourceTab">
+	                        <textarea class="scripttextarea" id="Source" ng-blur="SourceTodos()"></textarea>
+	                    </li>
+	                </ul>
+	            </div>
+	            <div class="uk-width-1-5 uk-margin-medium-top">
+	                <div class="uk-text-lead">Placeholder</div>
+	                <dl ng-dblclick="CreateNewCommand(key)" ng-repeat="(key, value) in placeholder" class="noselect uk-box-shadow-hover-medium uk-padding-small uk-text-break uk-description-list uk-description-list-divider">
+	                    <dt>{{value.Name}}</dt>
+	                    <dd>{{value.Description}}</dd>
+	                </dl>
+	            </div>
+	        </div>
+	        <div style="min-height: 200px"></div>
+	    </div>
+	</body>
+</html>
