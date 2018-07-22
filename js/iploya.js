@@ -26,3 +26,19 @@ a.plugins = []; a.todos = { Version: "iploya 00.05a", Commands: {} }; a.placehol
         return "undefined" !== typeof a.todos[b] ? a.GetNextStepId() : b
     }; a.GenerateRandomString = function (a) { a = void 0 === a ? 5 : a; for (var b = "", c = 0; c < a; c++)b += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(62 * Math.random())); return b }; a.Alert = function (a) { UIkit.modal.alert(a) }; a.AddNewRection = function (b, d) { if ("Enter" === b.key) { var c = b.target.value; if ("undefined" !== typeof d[c]) return a.Alert("already a recation defined"); d[c] = "next"; b.target.value = "" } }
 });
+
+
+angular.module('myApp')
+    .directive('compile', ['$compile', function ($compile) {
+        return function (scope, element, attrs) {
+            scope.$watch(
+                function (scope) {
+                    return scope.$eval(attrs.compile);
+                },
+                function (value) {
+                    element.html(value);
+                    $compile(element.contents())(scope);
+                }
+            );
+        };
+    }]);
