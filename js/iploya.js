@@ -7,38 +7,167 @@
 	*	License: MIT
 	*/
 
-var app = angular.module("myApp", []);
-app.controller("myCtrl", function (a, f) {
-a.plugins = []; a.todos = { Version: "iploya 00.05a", Commands: {} }; a.placeholder = []; a.SetVariablesTmp = {}; a.SourceTodos = function () { a.todos = JSON.parse(angular.element(document.getElementById("Source")).val()) }; a.TodoToJson = function () { angular.element(document.getElementById("Source")).val(JSON.stringify(a.todos, null, 2)) }; f.get("./api/pluginsinfo.json").then(function (b) { a.plugins = b.data }); f.get("./api/placeholder.json").then(function (b) { a.placeholder = b.data }); a.ParseSource =
-    function () { var b = angular.element("#Source").val(); a.todos = JSON.parse(b) }; a.ShowPrompt = function (a, d, c) { UIkit.modal.prompt(a, d).then(function (a) { c(a) }) }; a.GetInputByAction = function (b) { return a.plugins[b].Inputs }; a.GetInputReactionsById = function (b) { console.log(b); console.warn(a.todos); return a.todos.Commands[b].On }; a.GetCurrentValueByKey = function (b, d) { var c = ""; angular.forEach(a.todos.Commands, function (a, f) { f === b && (c = a.Arguments[d]) }); return c }; a.RemoveId_OnClick = function (b) {
-        UIkit.modal.confirm("Are you sure to remove Step <strong>" +
-            b + "</strong> ?").then(function () { a.RemoveId(b) }, function () { })
-    }; a.RemoveId = function (b) { delete a.todos.Commands[b]; a.$apply() }; a.UpdateSource = function () { console.log("ja"); document.getElementById("Source").value("test") }; a.CreateNewCommand = function (b) {
-        if ("undefined" === typeof a.plugins || 0 === a.plugins.length) return a.Alert("no plugins loaded"); if ("undefined" === typeof a.plugins[b]) return a.Alert("plugin with id " + b + " has no plugin description."); var d = { Action: b, Arguments: [], SetVariable: [], On: { 0: "next" } },
-            c = a.GetNextStepId(); a.todos.Commands[c] = d; "undefined" !== typeof a.plugins[b].Inputs && angular.forEach(a.plugins[b].Inputs, function (a, b) { "undefined" !== typeof a.DefaultValue && d.Arguments.push(a.DefaultValue) }); a.TodoToJson()
-    }; a.AddSetVariable = function (b) {
-        if ("undefined" !== typeof a.SetVariablesTmp[b + "-key"] && "undefined" !== typeof a.SetVariablesTmp[b + "-value"]) {
-            if ("" === a.SetVariablesTmp[b + "-key"]) return a.Alert("please enter a setvalue key."); if ("" === a.SetVariablesTmp[b + "-value"]) return a.Alert("please enter a setvalue value.");
-            a.todos.Commands[b].SetVariable.push([a.SetVariablesTmp[b + "-key"], a.SetVariablesTmp[b + "-value"]]); console.log(a.todos.Commands); a.SetVariablesTmp[b + "-key"] = ""; a.SetVariablesTmp[b + "-value"] = ""
-        }
-    }; a.RemoveSetVariable = function (b, d) { for (var c = [], e = 0; e < a.todos.Commands[b].SetVariable.length; e++)console.log(a.todos.Commands[b].SetVariable[e]), a.todos.Commands[b].SetVariable[e][0] !== d && c.push(a.todos.Commands[b].SetVariable[e]); a.todos.Commands[b].SetVariable = c }; a.GetNextStepId = function () {
-        var b = a.GenerateRandomString();
-        return "undefined" !== typeof a.todos[b] ? a.GetNextStepId() : b
-    }; a.GenerateRandomString = function (a) { a = void 0 === a ? 5 : a; for (var b = "", c = 0; c < a; c++)b += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".charAt(Math.floor(62 * Math.random())); return b }; a.Alert = function (a) { UIkit.modal.alert(a) }; a.AddNewRection = function (b, d) { if ("Enter" === b.key) { var c = b.target.value; if ("undefined" !== typeof d[c]) return a.Alert("already a recation defined"); d[c] = "next"; b.target.value = "" } }
-});
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function ($scope, $http) {
 
+    $scope.plugins = [];
+    $scope.todos = { Version: "iploya 00.05a", Commands: {} };
+    $scope.placeholder = [];
 
-angular.module('myApp')
-    .directive('compile', ['$compile', function ($compile) {
-        return function (scope, element, attrs) {
-            scope.$watch(
-                function (scope) {
-                    return scope.$eval(attrs.compile);
-                },
-                function (value) {
-                    element.html(value);
-                    $compile(element.contents())(scope);
-                }
-            );
+    $scope.SetVariablesTmp = {};
+
+    $scope.SourceTodos = function () {
+        $scope.todos = JSON.parse(angular.element(document.getElementById('Source')).val());
+    }
+
+    $scope.TodoToJson = function () {
+        angular.element(document.getElementById('Source')).val(JSON.stringify($scope.todos, null, 2));
+    }
+
+    $http.get("./api/pluginsinfo.json")
+        .then(function (response) {
+            $scope.plugins = response.data;
+        });
+
+    $http.get("./api/placeholder.json")
+        .then(function (response) {
+            $scope.placeholder = response.data;
+        });
+
+    $scope.ParseSource = function () {
+        let src = angular.element('#Source').val();
+        $scope.todos = JSON.parse(src);
+    }
+
+    $scope.ShowPrompt = function (header, text, func) {
+        UIkit.modal.prompt(header, text).then(function (val) {
+            func(val);
+        });
+    }
+
+    $scope.GetInputByAction = function (action) {
+        return $scope.plugins[action].Inputs;
+    }
+
+    $scope.GetInputReactionsById = function (id) {
+        console.log(id);
+        console.warn($scope.todos);
+        return $scope.todos.Commands[id].On;
+    }
+
+    $scope.GetCurrentValueByKey = function (willkey, index) {
+        let ret = '';
+        angular.forEach($scope.todos.Commands, function (value, key) {
+            if (key === willkey) {
+                ret = value.Arguments[index];
+            }
+        });
+        return ret;
+    }
+
+    $scope.RemoveId_OnClick = function (id) {
+        UIkit.modal.confirm('Are you sure to remove Step <strong>' + id + '</strong> ?').then(function () {
+            $scope.RemoveId(id);
+        }, function () { });
+    }
+
+    $scope.RemoveId = function (id) {
+        delete $scope.todos.Commands[id];
+        $scope.$apply();
+    }
+
+    $scope.UpdateSource = function () {
+        console.log('ja');
+        document.getElementById('Source').value('test');
+    }
+
+    $scope.CreateNewCommand = function (commandId) {
+
+        if (typeof $scope.plugins === 'undefined' || $scope.plugins.length === 0)
+            return $scope.Alert('no plugins loaded');
+
+        if (typeof $scope.plugins[commandId] === 'undefined')
+            return $scope.Alert('plugin with id ' + commandId + ' has no plugin description.');
+
+        let newObject = {
+            Action: commandId, Arguments: [], SetVariable: [], On: { 0: "next" }
         };
-    }]);
+
+        let rnd = $scope.GetNextStepId();
+
+        $scope.todos.Commands[rnd] = newObject;
+
+        if (typeof $scope.plugins[commandId].Inputs !== 'undefined')
+            angular.forEach($scope.plugins[commandId].Inputs, function (value, key) {
+                if (typeof value.DefaultValue !== 'undefined')
+                    newObject.Arguments.push(value.DefaultValue);
+            });
+
+        $scope.TodoToJson();
+    }
+
+    $scope.AddSetVariable = function (id) {
+
+        if (typeof $scope.SetVariablesTmp[id + '-key'] === 'undefined' || typeof $scope.SetVariablesTmp[id + '-value'] === 'undefined')
+            return;
+
+        if ($scope.SetVariablesTmp[id + '-key'] === '')
+            return $scope.Alert('please enter a setvalue key.');
+
+
+        if ($scope.SetVariablesTmp[id + '-value'] === '')
+            return $scope.Alert('please enter a setvalue value.');
+
+        let key = $scope.SetVariablesTmp[id + '-key'];
+        let val = $scope.SetVariablesTmp[id + '-value'];
+
+        $scope.todos.Commands[id].SetVariable.push([key, val]);
+
+        console.log($scope.todos.Commands);
+
+        $scope.SetVariablesTmp[id + '-key'] = '';
+        $scope.SetVariablesTmp[id + '-value'] = '';
+    }
+
+    $scope.RemoveSetVariable = function (id, key) {
+        let old = [];
+        for (let i = 0; i < $scope.todos.Commands[id].SetVariable.length; i++) {
+            console.log($scope.todos.Commands[id].SetVariable[i]);
+            if ($scope.todos.Commands[id].SetVariable[i][0] !== key)
+                old.push($scope.todos.Commands[id].SetVariable[i]);
+        }
+        $scope.todos.Commands[id].SetVariable = old;
+    }
+
+    $scope.GetNextStepId = function () {
+        let rnd = $scope.GenerateRandomString();
+        if (typeof $scope.todos[rnd] !== 'undefined')
+            return $scope.GetNextStepId();
+        return rnd;
+    }
+
+    $scope.GenerateRandomString = function (rnd_length = 5) {
+        let p = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let rnd = "";
+        for (var i = 0; i < rnd_length; i++)
+            rnd += p.charAt(Math.floor(Math.random() * p.length));
+        return rnd;
+    }
+
+    $scope.Alert = function (msg) {
+        UIkit.modal.alert(msg);
+    }
+
+    $scope.AddNewRection = function (event, where) {
+        if (event.key !== 'Enter')
+            return;
+
+        let v = event.target.value;
+
+        if (typeof where[v] !== 'undefined')
+            return $scope.Alert('already a recation defined');
+        where[v] = 'next';
+        event.target.value = '';
+    }
+
+});
