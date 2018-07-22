@@ -8,6 +8,7 @@
 	*/
 
 var app = angular.module('myApp', []);
+
 app.controller('myCtrl', function ($scope, $http) {
 
     $scope.plugins = [];
@@ -33,6 +34,35 @@ app.controller('myCtrl', function ($scope, $http) {
         .then(function (response) {
             $scope.placeholder = response.data;
         });
+
+    $scope.OpenFileDialog = function () {
+        $scope.ShowPrompt('open File', './examples/simpleVariableMessage.json',
+
+            (val) => {
+                if (val === null)
+                    return;
+                $http.get(val)
+                    .then(function (response) {
+                        $scope.todos = response.data;
+                    });
+            }
+        );
+    }
+
+    $scope.CreateNewFileDialog = function () {
+        $scope.ShowPrompt('create new File', '',
+
+            (val) => {
+
+                if (val === null)
+                    return;
+
+                alert(val);
+
+            }
+
+        );
+    }
 
     $scope.ParseSource = function () {
         let src = angular.element('#Source').val();
@@ -138,6 +168,7 @@ app.controller('myCtrl', function ($scope, $http) {
         }
         $scope.todos.Commands[id].SetVariable = old;
     }
+
 
     $scope.GetNextStepId = function () {
         let rnd = $scope.GenerateRandomString();
