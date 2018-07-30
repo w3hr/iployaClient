@@ -8,7 +8,7 @@
         "Label": "Directory Path",
         "Description": "the Directory Path to create",
         "Type": "text",
-        "DefaultValue":  "/"
+        "DefaultValue": "/"
       }
     ]
   },
@@ -28,6 +28,63 @@
         "Description": "the Target Directory Path to copy",
         "Type": "text",
         "DefaultValue": "/"
+      }
+    ]
+  },
+  "gitCreateRepo ": {
+    "Section": "Git operations",
+    "Name": "Create a new Git repo",
+    "Description": "New Git repo destination folder.",
+    "Inputs": [
+      {
+        "Label": "Destination",
+        "Description": "Destination of the new Git repo",
+        "Type": "text",
+        "DefaultValue": "/"
+      }
+    ]
+  },
+  "gitStageAndCommit  ": {
+    "Section": "Git operations",
+    "Name": "Stage and Commit a Git repo",
+    "Description": "Stage and Commit a Git repo.",
+    "Inputs": [
+      {
+        "Label": "Git repo path",
+        "Description": "Git repo path",
+        "Type": "text",
+        "DefaultValue": "/"
+      },
+      {
+        "Label": "Commitmessage",
+        "Description": "Commitmessage",
+        "Type": "text",
+        "DefaultValue": "Init Commit"
+      }
+    ]
+  },
+  "gitCheckoutBare": {
+    "Section": "Git operations",
+    "Name": "Checkout a Git Bare repo",
+    "Description": "Checkout a Git repo to a destination folder.",
+    "Inputs": [
+      {
+        "Label": "Checkout Target Path",
+        "Description": "The path where the Git Bare repo should checkout",
+        "Type": "text",
+        "DefaultValue": "/"
+      },
+      {
+        "Label": "Source Git Bare Path",
+        "Description": "the Source Directory of the Git Bare repo",
+        "Type": "text",
+        "DefaultValue": "/"
+      },
+      {
+        "Label": "Branchname",
+        "Description": "Branchname that should checkout",
+        "Type": "text",
+        "DefaultValue": "master"
       }
     ]
   },
@@ -72,7 +129,7 @@
         "Label": "Filepath",
         "Description": "Filesource path",
         "Type": "text",
-        "DefaultValue":  "/"
+        "DefaultValue": "/"
       },
       {
         "Label": "Search String",
