@@ -107,6 +107,25 @@
       }
     ]
   },
+  "msbuild": {
+    "Section": "Building",
+    "Name": "msbuild",
+    "Description": "Build with msbuild.",
+    "Inputs": [
+      {
+        "Label": "Filepath",
+        "Description": "Path of the file to build.",
+        "Type": "text",
+        "DefaultValue": "/"
+      },
+      {
+        "Label": "Build options",
+        "Description": "Building options",
+        "Type": "text",
+        "DefaultValue": "/p:Configuration=Release"
+      }
+    ]
+  },
   "removeDirectory": {
     "Section": "Dir / File operations",
     "Name": "remove Directory",
