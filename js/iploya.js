@@ -12,18 +12,18 @@ var app = angular.module('myApp', []);
 app.controller('myCtrl', function ($scope, $http) {
 
     $scope.plugins = [];
-    $scope.todos = { Version: "iploya 00.05a", Commands: {} };
+    $scope.todos = { Version: "iploya 00.06a", Commands: {} };
     $scope.placeholder = [];
 
     $scope.SetVariablesTmp = {};
 
     $scope.SourceTodos = function () {
         $scope.todos = JSON.parse(angular.element(document.getElementById('Source')).val());
-    }
+    };
 
     $scope.TodoToJson = function () {
         angular.element(document.getElementById('Source')).val(JSON.stringify($scope.todos, null, 2));
-    }
+    };
 
     $http.get("./api/pluginsinfo.json")
         .then(function (response) {
@@ -47,7 +47,7 @@ app.controller('myCtrl', function ($scope, $http) {
                     });
             }
         );
-    }
+    };
 
     $scope.CreateNewFileDialog = function () {
         $scope.ShowPrompt('create new File', '',
@@ -62,28 +62,28 @@ app.controller('myCtrl', function ($scope, $http) {
             }
 
         );
-    }
+    };
 
     $scope.ParseSource = function () {
         let src = angular.element('#Source').val();
         $scope.todos = JSON.parse(src);
-    }
+    };
 
     $scope.ShowPrompt = function (header, text, func) {
         UIkit.modal.prompt(header, text).then(function (val) {
             func(val);
         });
-    }
+    };
 
     $scope.GetInputByAction = function (action) {
         return $scope.plugins[action].Inputs;
-    }
+    };
 
     $scope.GetInputReactionsById = function (id) {
         console.log(id);
         console.warn($scope.todos);
         return $scope.todos.Commands[id].On;
-    }
+    };
 
     $scope.GetCurrentValueByKey = function (willkey, index) {
         let ret = '';
@@ -93,23 +93,23 @@ app.controller('myCtrl', function ($scope, $http) {
             }
         });
         return ret;
-    }
+    };
 
     $scope.RemoveId_OnClick = function (id) {
         UIkit.modal.confirm('Are you sure to remove Step <strong>' + id + '</strong> ?').then(function () {
             $scope.RemoveId(id);
         }, function () { });
-    }
+    };
 
     $scope.RemoveId = function (id) {
         delete $scope.todos.Commands[id];
         $scope.$apply();
-    }
+    };
 
     $scope.UpdateSource = function () {
         console.log('ja');
         document.getElementById('Source').value('test');
-    }
+    };
 
     $scope.CreateNewCommand = function (commandId) {
 
@@ -134,7 +134,7 @@ app.controller('myCtrl', function ($scope, $http) {
             });
 
         $scope.TodoToJson();
-    }
+    };
 
     $scope.AddSetVariable = function (id) {
 
@@ -157,7 +157,7 @@ app.controller('myCtrl', function ($scope, $http) {
 
         $scope.SetVariablesTmp[id + '-key'] = '';
         $scope.SetVariablesTmp[id + '-value'] = '';
-    }
+    };
 
     $scope.RemoveSetVariable = function (id, key) {
         let old = [];
@@ -167,7 +167,7 @@ app.controller('myCtrl', function ($scope, $http) {
                 old.push($scope.todos.Commands[id].SetVariable[i]);
         }
         $scope.todos.Commands[id].SetVariable = old;
-    }
+    };
 
 
     $scope.GetNextStepId = function () {
@@ -175,7 +175,7 @@ app.controller('myCtrl', function ($scope, $http) {
         if (typeof $scope.todos[rnd] !== 'undefined')
             return $scope.GetNextStepId();
         return rnd;
-    }
+    };
 
     $scope.GenerateRandomString = function (rnd_length = 5) {
         let p = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -183,11 +183,11 @@ app.controller('myCtrl', function ($scope, $http) {
         for (var i = 0; i < rnd_length; i++)
             rnd += p.charAt(Math.floor(Math.random() * p.length));
         return rnd;
-    }
+    };
 
     $scope.Alert = function (msg) {
         UIkit.modal.alert(msg);
-    }
+    };
 
     $scope.AddNewRection = function (event, where) {
         if (event.key !== 'Enter')
@@ -199,7 +199,7 @@ app.controller('myCtrl', function ($scope, $http) {
             return $scope.Alert('already a recation defined');
         where[v] = 'next';
         event.target.value = '';
-    }
+    };
 
 });
 
